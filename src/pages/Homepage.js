@@ -154,6 +154,29 @@ const Homepage = () => {
       {/* Floating Offer Banner */}
       <FloatingBanner />
 
+      {/* Top Marquee */}
+      <div className="bg-primary text-white py-2 overflow-hidden">
+        <div className="whitespace-nowrap animate-marquee flex items-center justify-center gap-8 text-sm font-medium tracking-wide">
+          <span>Free shipping on orders above 999</span>
+          <span>•</span>
+          <span>Easy returns</span>
+          <span>•</span>
+          <span>Secure online payments</span>
+          <span>•</span>
+          <span>Free shipping on orders above 999</span>
+          <span>•</span>
+          <span>Easy returns</span>
+          <span>•</span>
+          <span>Secure online payments</span>
+          <span>•</span>
+          <span>Free shipping on orders above 999</span>
+          <span>•</span>
+          <span>Easy returns</span>
+          <span>•</span>
+          <span>Secure online payments</span>
+        </div>
+      </div>
+
       {/* HeroSection */}
       <section className="w-full relative">
         <div
@@ -273,14 +296,14 @@ const Homepage = () => {
               }
             ].map((product, index) => (
               <div key={product.id} className="relative flex-shrink-0 w-80">
-                <Link 
+                <Link
                   to={`/product/${product.id}`}
                   className="bg-background-light dark:bg-background-dark border border-secondary/20 rounded-lg overflow-hidden group hover:shadow-lg transition-shadow flex flex-col h-full"
                 >
-                  <div 
+                  <div
                     className="bg-contain bg-center bg-no-repeat w-full h-72 bg-gray-50 dark:bg-gray-900 flex-shrink-0"
-                    style={{ 
-                      backgroundImage: `url('${product.image}')` 
+                    style={{
+                      backgroundImage: `url('${product.image}')`
                     }}
                   ></div>
                   <div className="p-4 flex flex-col flex-grow">
@@ -313,12 +336,11 @@ const Homepage = () => {
                   className="absolute top-3 right-3 p-2 rounded-full hover:scale-110 transition-transform"
                   aria-label="Add to wishlist"
                 >
-                  <span 
-                    className={`material-symbols-outlined text-3xl drop-shadow-lg ${
-                      isInWishlist(product.id) 
-                        ? 'text-red-500' 
+                  <span
+                    className={`material-symbols-outlined text-3xl drop-shadow-lg ${isInWishlist(product.id)
+                        ? 'text-red-500'
                         : 'text-white'
-                    }`}
+                      }`}
                     style={{ fontVariationSettings: isInWishlist(product.id) ? '"FILL" 1' : '"FILL" 0' }}
                   >
                     favorite
