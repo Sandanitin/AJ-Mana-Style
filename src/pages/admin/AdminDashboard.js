@@ -27,10 +27,10 @@ const AdminDashboard = () => {
       navigate('/login');
       return;
     }
-    
+
     const parsedUser = JSON.parse(userData);
     setUser(parsedUser);
-    
+
     // Optional: Check if user is admin (if you have role field)
     // if (parsedUser.role !== 'admin') {
     //   navigate('/');
@@ -112,11 +112,13 @@ const AdminDashboard = () => {
         <div className="p-4 border-b border-primary/20 dark:border-white/10 flex items-center justify-between">
           {isSidebarOpen && (
             <div className="flex items-center gap-2">
-              <img src="/Logo_Transparent.png" alt="Logo" className="w-8 h-8" />
+              <div className="w-8 h-8 flex items-center justify-center bg-primary text-secondary rounded-full border border-secondary">
+                <span className="font-display font-bold text-xs">AJ</span>
+              </div>
               <span className="font-display font-bold text-secondary">Admin Panel</span>
             </div>
           )}
-          <button 
+          <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             className="p-2 hover:bg-primary/10 dark:hover:bg-white/10 rounded-lg transition-colors"
           >
@@ -132,11 +134,10 @@ const AdminDashboard = () => {
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center gap-3 px-4 py-3 transition-colors ${
-                activeTab === item.id
+              className={`w-full flex items-center gap-3 px-4 py-3 transition-colors ${activeTab === item.id
                   ? 'bg-secondary text-primary font-bold'
                   : 'text-primary/80 dark:text-white/90 hover:bg-primary/10 dark:hover:bg-white/10'
-              }`}
+                }`}
             >
               <span className="material-symbols-outlined">{item.icon}</span>
               {isSidebarOpen && <span className="font-body text-sm">{item.label}</span>}
@@ -146,7 +147,7 @@ const AdminDashboard = () => {
 
         {/* Logout */}
         <div className="p-4 border-t border-primary/20 dark:border-white/10">
-          <button 
+          <button
             onClick={handleLogout}
             className="w-full flex items-center gap-3 px-4 py-3 text-primary/80 dark:text-white/90 hover:bg-primary/10 dark:hover:bg-white/10 rounded-lg transition-colors"
           >

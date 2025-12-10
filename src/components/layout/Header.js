@@ -25,7 +25,7 @@ const Header = () => {
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
-    
+
     // Listen for storage changes (when user data is updated)
     const handleStorageChange = (e) => {
       if (e.key === 'user') {
@@ -33,7 +33,7 @@ const Header = () => {
         setUser(newUser);
       }
     };
-    
+
     // Listen for custom event when user data changes
     const handleUserUpdate = () => {
       const storedUser = localStorage.getItem('user');
@@ -41,10 +41,10 @@ const Header = () => {
         setUser(JSON.parse(storedUser));
       }
     };
-    
+
     window.addEventListener('storage', handleStorageChange);
     window.addEventListener('userUpdated', handleUserUpdate);
-    
+
     return () => {
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('userUpdated', handleUserUpdate);
@@ -57,10 +57,10 @@ const Header = () => {
       setCollections(dataStore.getCollections().map(c => c.name));
       setCategories(dataStore.getCategories().map(c => c.name));
     };
-    
+
     updateData();
     const unsubscribe = dataStore.subscribe(updateData);
-    
+
     return () => unsubscribe();
   }, []);
 
@@ -101,38 +101,36 @@ const Header = () => {
       <header className="sticky top-0 z-40 flex items-center justify-between whitespace-nowrap border-b border-solid border-secondary/30 px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 py-3 sm:py-4 md:py-3 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-sm">
         <Link to="/" className="flex items-center gap-2 sm:gap-3 md:gap-4 hover:opacity-80 transition-opacity">
           <div className="size-12 sm:size-14 md:size-14">
-            <img 
-              src="/Logo_Transparent.png" 
-              alt="Vastrani Looms Logo" 
-              className="w-full h-full object-contain"
-            />
+            <div className="w-full h-full flex items-center justify-center bg-primary text-white rounded-full border-2 border-secondary shadow-sm">
+              <span className="font-display font-bold text-lg sm:text-xl">AJ</span>
+            </div>
           </div>
           <h2 className="text-primary dark:text-secondary text-xl sm:text-2xl md:text-2xl font-bold font-display leading-tight tracking-[-0.015em]">
-            Vastrani Looms
+            AJ-Mana Style
           </h2>
         </Link>
-        
+
         <nav className="hidden md:flex flex-1 justify-center items-center gap-4 lg:gap-6 xl:gap-9">
           <Link className="text-text-light dark:text-text-dark text-xs lg:text-sm font-medium font-body leading-normal hover:text-secondary" to="/">Home</Link>
-          
+
           {/* Shop Now Dropdown */}
-          <div 
+          <div
             className="relative"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
-            <Link 
-              className="text-text-light dark:text-text-dark text-xs lg:text-sm font-medium font-body leading-normal hover:text-secondary flex items-center gap-1" 
+            <Link
+              className="text-text-light dark:text-text-dark text-xs lg:text-sm font-medium font-body leading-normal hover:text-secondary flex items-center gap-1"
               to="/products"
               onClick={() => setIsShopDropdownOpen(false)}
             >
               Shop Now
               <span className="material-symbols-outlined text-xs lg:text-sm">keyboard_arrow_down</span>
             </Link>
-            
+
             {/* Mega Menu Dropdown */}
             {isShopDropdownOpen && (
-              <div 
+              <div
                 className="absolute top-full left-1/2 transform -translate-x-1/2 w-[280px] sm:w-[400px] md:w-[600px] lg:w-[800px] xl:w-[900px] bg-background-light dark:bg-background-dark border border-secondary/30 rounded-lg shadow-xl z-50 p-3 sm:p-4 md:p-5 lg:p-6"
                 style={{ marginTop: '0.5rem' }}
                 onMouseEnter={handleMouseEnter}
@@ -145,7 +143,7 @@ const Header = () => {
                       SHOP BY TYPE
                     </h3>
                   </div>
-                  
+
                   {/* Collections and Categories Container */}
                   <div className="flex flex-col sm:flex-row gap-6 flex-1">
                     {/* Collections Column */}
@@ -165,7 +163,7 @@ const Header = () => {
                         ))}
                       </div>
                     </div>
-                    
+
                     {/* Categories Column */}
                     <div className="flex-1">
                       <h3 className="text-primary dark:text-secondary text-xs font-bold font-display mb-2 md:mb-3">
@@ -185,7 +183,7 @@ const Header = () => {
                     </div>
                   </div>
                 </div>
-                
+
                 {/* View All Link */}
                 <div className="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-secondary/20 text-center">
                   <Link
@@ -199,14 +197,14 @@ const Header = () => {
               </div>
             )}
           </div>
-          
+
           <Link className="text-text-light dark:text-text-dark text-xs lg:text-sm font-medium font-body leading-normal hover:text-secondary" to="/about">About Us</Link>
           <Link className="text-text-light dark:text-text-dark text-xs lg:text-sm font-medium font-body leading-normal hover:text-secondary" to="/contact">Contact</Link>
         </nav>
-        
+
         <div className="flex items-center gap-2 md:gap-3">
           {/* Desktop Icons - Always visible on desktop */}
-          
+
           {/* Profile/Login Icon */}
           {user ? (
             <div className="hidden md:block relative">
@@ -225,12 +223,12 @@ const Header = () => {
                   {isProfileDropdownOpen ? 'expand_less' : 'expand_more'}
                 </span>
               </button>
-              
+
               {/* Profile Dropdown */}
               {isProfileDropdownOpen && (
                 <>
-                  <div 
-                    className="fixed inset-0 z-40" 
+                  <div
+                    className="fixed inset-0 z-40"
                     onClick={() => setIsProfileDropdownOpen(false)}
                   />
                   <div className="absolute right-0 mt-3 w-64 bg-background-light dark:bg-background-dark border border-primary/20 dark:border-secondary/20 rounded-xl shadow-2xl z-50 overflow-hidden">
@@ -246,7 +244,7 @@ const Header = () => {
                         </div>
                       </div>
                     </div>
-                    
+
                     {/* Menu Items */}
                     <div className="py-2">
                       <button
@@ -291,12 +289,12 @@ const Header = () => {
                         </div>
                         <span>Settings</span>
                       </Link>
-                      
+
                       {/* Divider */}
                       <div className="my-2 px-5">
                         <div className="border-t border-primary/10 dark:border-secondary/10"></div>
                       </div>
-                      
+
                       <button
                         onClick={handleLogout}
                         className="flex items-center gap-4 px-5 py-3 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 w-full text-left group"
@@ -316,7 +314,7 @@ const Header = () => {
               <span className="material-symbols-outlined text-2xl">person</span>
             </Link>
           )}
-          
+
           <Link to="/wishlist" className="hidden md:flex cursor-pointer items-center justify-center rounded-full h-10 w-10 bg-primary/10 dark:bg-secondary/10 text-text-light dark:text-text-dark hover:bg-primary/20 dark:hover:bg-secondary/20 relative">
             <span className="material-symbols-outlined text-2xl">favorite</span>
             {wishlistItems.length > 0 && (
@@ -325,7 +323,7 @@ const Header = () => {
               </span>
             )}
           </Link>
-          
+
           <Link to="/cart" className="hidden md:flex cursor-pointer items-center justify-center rounded-full h-10 w-10 bg-primary/10 dark:bg-secondary/10 text-text-light dark:text-text-dark hover:bg-primary/20 dark:hover:bg-secondary/20 relative">
             <span className="material-symbols-outlined text-2xl">shopping_bag</span>
             {getCartCount() > 0 && (
@@ -334,9 +332,9 @@ const Header = () => {
               </span>
             )}
           </Link>
-          
+
           {/* Mobile Hamburger Menu */}
-          <button 
+          <button
             className="md:hidden flex cursor-pointer items-center justify-center overflow-hidden rounded-full h-9 w-9 bg-primary/10 dark:bg-secondary/10 text-text-light dark:text-text-dark hover:bg-primary/20 dark:hover:bg-secondary/20"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
@@ -344,12 +342,12 @@ const Header = () => {
           </button>
         </div>
       </header>
-      
+
       {/* Mobile Menu - Slides from Left */}
       {isMobileMenuOpen && (
         <>
           {/* Backdrop */}
-          <div 
+          <div
             className="md:hidden fixed inset-0 bg-black/50 z-40 animate-fadeIn"
             onClick={() => {
               setIsMobileMenuOpen(false);
@@ -357,7 +355,7 @@ const Header = () => {
               setMobileExpandedSection(null);
             }}
           />
-          
+
           {/* Main Menu Sidebar - Slides from Left */}
           <div className="md:hidden fixed top-0 left-0 h-full w-[300px] bg-background-light dark:bg-background-dark z-50 shadow-2xl animate-slideInLeft overflow-y-auto">
             {/* Close Button */}
@@ -374,11 +372,11 @@ const Header = () => {
                 <span className="material-symbols-outlined text-2xl">close</span>
               </button>
             </div>
-            
+
             {/* Mobile Icons Section */}
             <div className="flex justify-around gap-4 p-5 border-b border-secondary/20 bg-gradient-to-br from-primary/5 to-transparent dark:from-secondary/5 dark:to-transparent">
               {user ? (
-                <button 
+                <button
                   onClick={() => setMobileProfileExpanded(!mobileProfileExpanded)}
                   className="flex flex-col items-center gap-2 text-text-light dark:text-text-dark hover:text-secondary"
                 >
@@ -418,7 +416,7 @@ const Header = () => {
                 <span className="text-xs font-body">Cart</span>
               </Link>
             </div>
-            
+
             {/* User Profile Section (Mobile) - Only show when expanded */}
             {user && mobileProfileExpanded && (
               <div className="p-5 border-b border-secondary/20 bg-gradient-to-br from-primary/5 to-transparent dark:from-secondary/5 dark:to-transparent">
@@ -489,11 +487,11 @@ const Header = () => {
                 </button>
               </div>
             )}
-            
+
             {/* Navigation Links */}
             <nav className="flex flex-col p-5">
-              <Link 
-                className="text-text-light dark:text-text-dark text-lg font-medium font-body leading-normal hover:text-secondary py-4 border-b border-secondary/10" 
+              <Link
+                className="text-text-light dark:text-text-dark text-lg font-medium font-body leading-normal hover:text-secondary py-4 border-b border-secondary/10"
                 to="/"
                 onClick={() => {
                   setIsMobileMenuOpen(false);
@@ -503,7 +501,7 @@ const Header = () => {
               >
                 Home
               </Link>
-              
+
               {/* Shop Now Button */}
               <button
                 className="text-left text-text-light dark:text-text-dark text-lg font-medium font-body leading-normal hover:text-secondary flex items-center justify-between py-4 border-b border-secondary/10"
@@ -512,9 +510,9 @@ const Header = () => {
                 <span>Shop Now</span>
                 <span className="material-symbols-outlined text-xl">keyboard_arrow_right</span>
               </button>
-              
-              <Link 
-                className="text-text-light dark:text-text-dark text-lg font-medium font-body leading-normal hover:text-secondary py-4 border-b border-secondary/10" 
+
+              <Link
+                className="text-text-light dark:text-text-dark text-lg font-medium font-body leading-normal hover:text-secondary py-4 border-b border-secondary/10"
                 to="/about"
                 onClick={() => {
                   setIsMobileMenuOpen(false);
@@ -524,8 +522,8 @@ const Header = () => {
               >
                 About Us
               </Link>
-              <Link 
-                className="text-text-light dark:text-text-dark text-lg font-medium font-body leading-normal hover:text-secondary py-4" 
+              <Link
+                className="text-text-light dark:text-text-dark text-lg font-medium font-body leading-normal hover:text-secondary py-4"
                 to="/contact"
                 onClick={() => {
                   setIsMobileMenuOpen(false);
@@ -537,7 +535,7 @@ const Header = () => {
               </Link>
             </nav>
           </div>
-          
+
           {/* Shop Menu Sidebar - Slides from Right */}
           {mobileShopExpanded && (
             <div className="md:hidden fixed top-0 right-0 h-full w-[300px] bg-background-light dark:bg-background-dark z-50 shadow-2xl animate-slideInRight overflow-y-auto">
@@ -554,7 +552,7 @@ const Header = () => {
                 </button>
                 <h3 className="text-2xl font-display font-bold text-primary dark:text-secondary">Shop</h3>
               </div>
-              
+
               {/* Shop Content */}
               <div className="p-5">
                 {!mobileExpandedSection ? (
@@ -575,7 +573,7 @@ const Header = () => {
                         <span className="material-symbols-outlined text-xl">arrow_forward</span>
                       </div>
                     </Link>
-                    
+
                     {/* Collection - Expandable */}
                     <button
                       className="w-full text-left text-text-light dark:text-text-dark text-lg font-medium font-body leading-normal hover:text-secondary py-4 border-b border-secondary/10"
@@ -586,7 +584,7 @@ const Header = () => {
                         <span className="material-symbols-outlined text-xl">keyboard_arrow_right</span>
                       </div>
                     </button>
-                    
+
                     {/* Category - Expandable */}
                     <button
                       className="w-full text-left text-text-light dark:text-text-dark text-lg font-medium font-body leading-normal hover:text-secondary py-4"
@@ -609,7 +607,7 @@ const Header = () => {
                       <span className="material-symbols-outlined text-xl">arrow_back</span>
                       Back
                     </button>
-                    
+
                     {mobileExpandedSection === 'collections' && (
                       <>
                         <h4 className="text-primary dark:text-secondary text-base font-bold font-display mb-4 uppercase">Collections</h4>
@@ -629,7 +627,7 @@ const Header = () => {
                         ))}
                       </>
                     )}
-                    
+
                     {mobileExpandedSection === 'categories' && (
                       <>
                         <h4 className="text-primary dark:text-secondary text-base font-bold font-display mb-4 uppercase">Categories</h4>
@@ -656,12 +654,12 @@ const Header = () => {
           )}
         </>
       )}
-      
+
       {/* Profile Modal */}
-      <ProfileModal 
-        user={user} 
-        isOpen={isProfileModalOpen} 
-        onClose={() => setIsProfileModalOpen(false)} 
+      <ProfileModal
+        user={user}
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
       />
     </>
   );

@@ -15,7 +15,7 @@ const Products = () => {
 
   const categoryParam = searchParams.get('category');
   const collectionParam = searchParams.get('collection');
-  
+
   const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://seashell-yak-534067.hostingersite.com/backend/api';
 
   // Fetch fabrics on mount
@@ -41,21 +41,21 @@ const Products = () => {
       try {
         let url = `${API_BASE_URL}/products.php`;
         const params = new URLSearchParams();
-        
+
         if (categoryParam) {
           params.append('category', categoryParam);
         }
         if (collectionParam) {
           params.append('collection', collectionParam);
         }
-        
+
         if (params.toString()) {
           url += `?${params.toString()}`;
         }
-        
+
         const response = await fetch(url);
         const result = await response.json();
-        
+
         if (result.success) {
           setProducts(result.data);
         }
@@ -65,59 +65,92 @@ const Products = () => {
         setLoading(false);
       }
     };
-    
+
     fetchProducts();
   }, [categoryParam, collectionParam, API_BASE_URL]);
 
   // Generate dynamic heading
   const getHeading = () => {
     if (categoryParam) {
-      return `Our ${categoryParam} Saree Collection`;
+      if (categoryParam.toLowerCase() === 'men') return 'Exclusive Men\'s Collection';
+      if (categoryParam.toLowerCase() === 'women') return 'Exquisite Women\'s Collection';
+      if (categoryParam.toLowerCase() === 'kids') return 'Playful Kids\' Collection';
+      if (categoryParam.toLowerCase() === 'footwear') return 'Handcrafted Footwear';
+      return `Our ${categoryParam.charAt(0).toUpperCase() + categoryParam.slice(1)} Collection`;
     }
     if (collectionParam) {
       return `Our ${collectionParam} Collection`;
     }
-    return 'Our Saree Collections';
+    return 'Our Exclusive Collections';
   };
 
-  const productCategories = [
-    {
-      title: "Banarasi Silk Sarees",
-      description: "Luxurious silk sarees with intricate gold and silver brocade work",
-      image: "/banarasi-collection.jpg",
-      priceRange: "$400 - $800"
-    },
-    {
-      title: "Kanchipuram Silk Sarees",
-      description: "Traditional temple border sarees with rich colors and motifs",
-      image: "/kanchipuram-collection.jpg",
-      priceRange: "$450 - $900"
-    },
-    {
-      title: "Chanderi Cotton Sarees",
-      description: "Lightweight, comfortable sarees perfect for daily wear",
-      image: "/chanderi-collection.jpg",
-      priceRange: "$150 - $350"
-    },
-    {
-      title: "Tussar Silk Sarees",
-      description: "Natural textured silk sarees with earthy elegance",
-      image: "/tussar-collection.jpg",
-      priceRange: "$200 - $500"
-    },
-    {
-      title: "Wedding Collection",
-      description: "Exquisite bridal sarees for your special day",
-      image: "/wedding-collection.jpg",
-      priceRange: "$600 - $1200"
-    },
-    {
-      title: "Festival Collection",
-      description: "Vibrant sarees perfect for celebrations",
-      image: "/festival-collection.jpg",
-      priceRange: "$250 - $600"
+  const getDescription = () => {
+    if (categoryParam?.toLowerCase() === 'men') {
+      return "Refined ethnic wear for the modern gentleman. Explore our range of sherwanis, kurtas, and accessories crafted for elegance and comfort.";
     }
-  ];
+    if (categoryParam?.toLowerCase() === 'kids') {
+      return "Delightful ethnic outfits for your little ones. Comfortable fabrics and festive designs to make every celebration special.";
+    }
+    if (categoryParam?.toLowerCase() === 'footwear') {
+      return "Step into tradition with our handcrafted juttis and mojaris. The perfect finishing touch to your ethnic ensemble.";
+    }
+    return "Discover our curated collections of handwoven masterpieces. Each piece is crafted with love, attention to detail, and deep respect for tradition.";
+  };
+
+  // Mock data for categories in case API is empty/missing
+  const getMockProducts = () => {
+    const category = categoryParam?.toLowerCase();
+
+    // We have 4 unique images per category for variety
+    // 0: Royal/Category Banner, 1: Classic (prod-1), 2: Modern (prod-2), 3: Festive (prod-3)
+    const mockImages = {
+      men: ['/cat-men.png', '/men-prod-1.png', '/men-prod-2.png', '/men-prod-3.png'],
+      women: ['/cat-women.png', '/women-prod-1.png', '/women-prod-2.png', '/women-prod-3.png'],
+      kids: ['/cat-kids.png', '/kids-prod-1.png', '/kids-prod-2.png', '/kids-prod-3.png'],
+      footwear: ['/cat-footwear.png', '/footwear-prod-1.png', '/footwear-prod-2.png', '/footwear-prod-3.png']
+    };
+
+    if (['men', 'women', 'kids', 'footwear'].includes(category)) {
+      const imgs = mockImages[category];
+      return [
+        {
+          id: `mock-${category}-1`,
+          name: `Royal ${category.charAt(0).toUpperCase() + category.slice(1)} Ensemble`,
+          description: `Handcrafted elegance for the perfect look.`,
+          price: 4999,
+          sale_price: null,
+          images: [{ url: imgs[0] }]
+        },
+        {
+          id: `mock-${category}-2`,
+          name: `Classic ${category.charAt(0).toUpperCase() + category.slice(1)} Edition`,
+          description: `Premium quality ${category} wear for special occasions.`,
+          price: 2499,
+          sale_price: 1999,
+          images: [{ url: imgs[1] }]
+        },
+        {
+          id: `mock-${category}-3`,
+          name: `Modern ${category.charAt(0).toUpperCase() + category.slice(1)} Style`,
+          description: `Contemporary designs with traditional roots.`,
+          price: 3299,
+          sale_price: 2799,
+          images: [{ url: imgs[2] }]
+        },
+        {
+          id: `mock-${category}-4`,
+          name: `Festive ${category.charAt(0).toUpperCase() + category.slice(1)} Choice`,
+          description: `Celebrate in style with this exclusive piece.`,
+          price: 1599,
+          sale_price: null,
+          images: [{ url: imgs[3] }]
+        }
+      ];
+    }
+    return [];
+  };
+
+  const displayedProducts = products.length > 0 ? products : getMockProducts();
 
   return (
     <div className="px-3 sm:px-6 lg:px-8 py-6 sm:py-10">
@@ -126,10 +159,9 @@ const Products = () => {
           {getHeading()}
         </h1>
         <p className="text-center text-text-light/80 dark:text-text-dark/80 font-body text-sm sm:text-base mb-6 sm:mb-10 max-w-2xl mx-auto px-2">
-          Discover our curated collections of handwoven sarees, each piece crafted with love and attention to detail. 
-          From traditional silk to contemporary cotton, find your perfect saree.
+          {getDescription()}
         </p>
-        
+
         {/* Filter Section */}
         <div className="flex flex-wrap gap-3 sm:gap-4 mb-6 sm:mb-8 justify-center">
           {/* Fabric Filter */}
@@ -176,30 +208,33 @@ const Products = () => {
             <option value="popular">Most Popular</option>
           </select>
         </div>
-        
+
         {loading ? (
           <div className="text-center py-20">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary dark:border-secondary"></div>
             <p className="mt-4 text-text-light dark:text-text-dark font-body">Loading products...</p>
           </div>
-        ) : products.length === 0 ? (
+        ) : displayedProducts.length === 0 ? (
           <div className="text-center py-20">
             <span className="material-symbols-outlined text-6xl text-gray-300 mb-4 block">inventory_2</span>
             <p className="text-text-light/60 dark:text-text-dark/60 font-body">No products found.</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-            {products.map((product) => (
-              <Link 
+            {displayedProducts.map((product) => (
+              <Link
                 key={product.id}
                 to={`/product/${product.id}`}
                 className="relative bg-background-light dark:bg-background-dark border border-secondary/20 rounded-lg overflow-hidden group hover:shadow-lg transition-all duration-300 flex flex-col"
               >
-                <div 
+                <div
                   className="bg-contain bg-center bg-no-repeat w-full h-80 transition-transform duration-300 group-hover:scale-105 bg-gray-50 dark:bg-gray-900 flex-shrink-0"
-                  style={{ 
-                    backgroundImage: product.images && product.images.length > 0 
-                      ? `url('${product.images[0].url.startsWith('http') ? product.images[0].url : 'https://seashell-yak-534067.hostingersite.com/' + product.images[0].url}')` 
+                  style={{
+                    backgroundImage: product.images && product.images.length > 0
+                      ? `url('${product.images[0].url.startsWith('http') || product.images[0].url.startsWith('/')
+                        ? product.images[0].url
+                        : 'https://seashell-yak-534067.hostingersite.com/' + product.images[0].url
+                      }')`
                       : 'linear-gradient(135deg, #F5E6D3 0%, #D4AF37 100%)'
                   }}
                 >
@@ -216,12 +251,11 @@ const Products = () => {
                     className="absolute top-3 right-3 p-2 rounded-full hover:scale-110 transition-transform z-10"
                     aria-label="Add to wishlist"
                   >
-                    <span 
-                      className={`material-symbols-outlined text-3xl drop-shadow-lg ${
-                        isInWishlist(product.id) 
-                          ? 'text-red-500' 
-                          : 'text-white'
-                      }`}
+                    <span
+                      className={`material-symbols-outlined text-3xl drop-shadow-lg ${isInWishlist(product.id)
+                        ? 'text-red-500'
+                        : 'text-white'
+                        }`}
                       style={{ fontVariationSettings: isInWishlist(product.id) ? '"FILL" 1' : '"FILL" 0' }}
                     >
                       favorite
@@ -257,43 +291,18 @@ const Products = () => {
             ))}
           </div>
         )}
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" style={{ display: 'none' }}>
-          {productCategories.map((category, index) => (
-            <div key={index} className="bg-background-light dark:bg-background-dark border border-secondary/20 rounded-lg overflow-hidden group hover:shadow-lg transition-all duration-300">
-              <div 
-                className="bg-cover bg-center aspect-[4/3] transition-transform duration-300 group-hover:scale-105" 
-                style={{ backgroundImage: `url('${category.image}')` }}
-              ></div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold font-display text-text-light dark:text-text-dark mb-2">
-                  {category.title}
-                </h3>
-                <p className="font-body text-text-light/80 dark:text-text-dark/80 mb-4">
-                  {category.description}
-                </p>
-                <div className="flex justify-between items-center">
-                  <span className="text-lg font-bold text-primary dark:text-secondary">
-                    {category.priceRange}
-                  </span>
-                  <button className="bg-primary text-white dark:bg-secondary dark:text-primary px-4 py-2 rounded-lg text-sm font-bold hover:bg-primary/90 dark:hover:bg-secondary/90 transition-colors">
-                    View Collection
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        
+
+
+
         <div className="mt-16 bg-primary/5 dark:bg-secondary/5 rounded-lg p-8 text-center">
           <h2 className="text-2xl font-bold font-display text-primary dark:text-secondary mb-4">
             Custom Orders Available
           </h2>
           <p className="font-body text-text-light dark:text-text-dark mb-6 max-w-2xl mx-auto">
-            Looking for something specific? We offer custom weaving services where you can work directly 
+            Looking for something specific? We offer custom weaving services where you can work directly
             with our master weavers to create a unique saree tailored to your preferences.
           </p>
-          <button 
+          <button
             onClick={() => navigate('/contact')}
             className="bg-primary text-white dark:bg-secondary dark:text-primary px-8 py-3 rounded-lg font-bold hover:bg-primary/90 dark:hover:bg-secondary/90 transition-colors"
           >
