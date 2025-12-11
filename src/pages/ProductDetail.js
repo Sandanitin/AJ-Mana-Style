@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { getProductById, getProductReviews } from '../data/catalogData';
 import { useCart } from '../context/CartContext';
 import ReviewModal from '../components/product/ReviewModal';
@@ -7,6 +7,7 @@ import ReviewModal from '../components/product/ReviewModal';
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { addToCart, addToWishlist, isInWishlist } = useCart();
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -22,6 +23,13 @@ const ProductDetail = () => {
   const [showAddedMessage, setShowAddedMessage] = useState(false);
 
   const fetchReviews = useCallback(async () => {
+    // Skip fetching reviews for dummy products
+    if (String(id).startsWith('dummy-')) {
+      setReviews([]);
+      setAvgRating(4.5);
+      setReviewCount(12);
+      return;
+    }
     try {
       const reviewData = await getProductReviews(id);
       setReviews(reviewData.reviews);
@@ -40,21 +48,47 @@ const ProductDetail = () => {
     const fetchProductData = async () => {
       try {
         setLoading(true);
+
+        // Check if this is a dummy product passed via state
+        if (location.state?.dummyProduct) {
+          const dummyProduct = location.state.dummyProduct;
+          // Enhance dummy product with additional fields for display
+          const enhancedProduct = {
+            ...dummyProduct,
+            fabric: 'Premium Silk',
+            category_name: dummyProduct.id.includes('men') ? 'Men' :
+              dummyProduct.id.includes('women') ? 'Women' :
+                dummyProduct.id.includes('kids') ? 'Kids' : 'Footwear',
+            collection_name: 'Exclusive Collection',
+            colors: [
+              { name: 'Red', code: '#8B0000' },
+              { name: 'Gold', code: '#D4AF37' },
+              { name: 'Navy', code: '#000080' }
+            ]
+          };
+          setProduct(enhancedProduct);
+          setRelatedProducts([]);
+          setSelectedColor(enhancedProduct.colors[0]);
+          fetchReviews();
+          setLoading(false);
+          return;
+        }
+
         const data = await getProductById(id);
         console.log('Fetched product data:', data);
-        
+
         // Handle if product is returned as array (take first item)
         const productData = Array.isArray(data.product) ? data.product[0] : data.product;
-        
+
         console.log('Product:', productData);
         console.log('Product name:', productData?.name);
         console.log('Product description:', productData?.description);
         console.log('Product images:', productData?.images);
         console.log('Related products:', data.relatedProducts);
-        
+
         setProduct(productData);
         setRelatedProducts(data.relatedProducts || []);
-        
+
         // Set default selected color to first available color
         if (productData?.colors && productData.colors.length > 0) {
           setSelectedColor(productData.colors[0]);
@@ -70,7 +104,7 @@ const ProductDetail = () => {
     };
 
     fetchProductData();
-  }, [id, fetchReviews]);
+  }, [id, fetchReviews, location.state]);
 
   const handleAddToCart = () => {
     addToCart(product, 1);
@@ -113,7 +147,7 @@ const ProductDetail = () => {
             <img
               alt={product.name}
               className="w-full h-full max-h-[500px] object-contain hover:scale-105 transition-transform duration-500 cursor-zoom-in"
-              src={product.images && product.images[selectedImage] ? (product.images[selectedImage].url.startsWith('http') ? product.images[selectedImage].url : `https://seashell-yak-534067.hostingersite.com/${product.images[selectedImage].url}`) : '/placeholder.jpg'}
+              src={product.images && product.images[selectedImage] ? (product.images[selectedImage].url.startsWith('http') || product.images[selectedImage].url.startsWith('/') ? product.images[selectedImage].url : `https://seashell-yak-534067.hostingersite.com/${product.images[selectedImage].url}`) : '/placeholder.jpg'}
             />
           </div>
           {product.images && product.images.length > 1 && (
@@ -122,14 +156,13 @@ const ProductDetail = () => {
                 <div
                   key={index}
                   onClick={() => setSelectedImage(index)}
-                  className={`w-full overflow-hidden rounded-md cursor-pointer transition-all ${
-                    selectedImage === index ? 'border-2 border-primary ring-2 ring-primary ring-offset-2' : 'border-2 border-transparent hover:border-primary/50'
-                  }`}
+                  className={`w-full overflow-hidden rounded-md cursor-pointer transition-all ${selectedImage === index ? 'border-2 border-primary ring-2 ring-primary ring-offset-2' : 'border-2 border-transparent hover:border-primary/50'
+                    }`}
                 >
                   <img
                     alt={`${product.name} - ${index + 1}`}
                     className="w-full h-full object-contain bg-gray-50 dark:bg-gray-900"
-                    src={image.url.startsWith('http') ? image.url : `https://seashell-yak-534067.hostingersite.com/${image.url}`}
+                    src={image.url.startsWith('http') || image.url.startsWith('/') ? image.url : `https://seashell-yak-534067.hostingersite.com/${image.url}`}
                   />
                 </div>
               ))}
@@ -160,8 +193,8 @@ const ProductDetail = () => {
           <div className="flex items-center gap-2 mt-4">
             <div className="flex text-secondary">
               {[1, 2, 3, 4, 5].map((star) => (
-                <span 
-                  key={star} 
+                <span
+                  key={star}
                   className={`material-symbols-outlined text-xl ${star <= Math.round(avgRating) ? 'text-yellow-500' : 'text-gray-300'}`}
                   style={{ fontVariationSettings: '"FILL" 1' }}
                 >
@@ -188,11 +221,10 @@ const ProductDetail = () => {
                   <button
                     key={index}
                     onClick={() => setSelectedColor(color)}
-                    className={`w-8 h-8 rounded-full border-2 ${
-                      selectedColor?.code === color.code
-                        ? 'border-primary ring-2 ring-offset-2 ring-offset-background-light dark:ring-offset-background-dark ring-primary'
-                        : 'border-transparent hover:border-primary/50'
-                    }`}
+                    className={`w-8 h-8 rounded-full border-2 ${selectedColor?.code === color.code
+                      ? 'border-primary ring-2 ring-offset-2 ring-offset-background-light dark:ring-offset-background-dark ring-primary'
+                      : 'border-transparent hover:border-primary/50'
+                      }`}
                     style={{ backgroundColor: color.code }}
                     title={color.name}
                   />
@@ -212,11 +244,10 @@ const ProductDetail = () => {
             </button>
             <button
               onClick={handleAddToWishlist}
-              className={`flex items-center justify-center h-12 w-12 rounded-lg ${
-                isInWishlist(product.id) 
-                  ? 'bg-primary text-white' 
-                  : 'bg-black/5 dark:bg-white/10 text-primary'
-              } hover:bg-primary hover:text-white transition-colors`}
+              className={`flex items-center justify-center h-12 w-12 rounded-lg ${isInWishlist(product.id)
+                ? 'bg-primary text-white'
+                : 'bg-black/5 dark:bg-white/10 text-primary'
+                } hover:bg-primary hover:text-white transition-colors`}
             >
               <span className="material-symbols-outlined">
                 {isInWishlist(product.id) ? 'favorite' : 'favorite_border'}
@@ -279,8 +310,8 @@ const ProductDetail = () => {
                 <div
                   className="w-full h-40 bg-contain bg-center bg-no-repeat bg-gray-50 dark:bg-gray-900"
                   style={{
-                    backgroundImage: relatedProduct.images && relatedProduct.images[0] 
-                      ? `url('${relatedProduct.images[0].url.startsWith('http') ? relatedProduct.images[0].url : 'https://seashell-yak-534067.hostingersite.com/' + relatedProduct.images[0].url}')` 
+                    backgroundImage: relatedProduct.images && relatedProduct.images[0]
+                      ? `url('${relatedProduct.images[0].url.startsWith('http') ? relatedProduct.images[0].url : 'https://seashell-yak-534067.hostingersite.com/' + relatedProduct.images[0].url}')`
                       : `url('/placeholder.jpg')`
                   }}
                 >

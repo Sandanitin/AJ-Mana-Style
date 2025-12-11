@@ -97,60 +97,42 @@ const Products = () => {
     return "Discover our curated collections of handwoven masterpieces. Each piece is crafted with love, attention to detail, and deep respect for tradition.";
   };
 
-  // Mock data for categories in case API is empty/missing
-  const getMockProducts = () => {
+  // Dummy products for categories without API data
+  const getDummyProducts = () => {
     const category = categoryParam?.toLowerCase();
 
-    // We have 4 unique images per category for variety
-    // 0: Royal/Category Banner, 1: Classic (prod-1), 2: Modern (prod-2), 3: Festive (prod-3)
-    const mockImages = {
-      men: ['/cat-men.png', '/men-prod-1.png', '/men-prod-2.png', '/men-prod-3.png'],
-      women: ['/cat-women.png', '/women-prod-1.png', '/women-prod-2.png', '/women-prod-3.png'],
-      kids: ['/cat-kids.png', '/kids-prod-1.png', '/kids-prod-2.png', '/kids-prod-3.png'],
-      footwear: ['/cat-footwear.png', '/footwear-prod-1.png', '/footwear-prod-2.png', '/footwear-prod-3.png']
+    const dummyData = {
+      men: [
+        { id: 'dummy-men-1', name: 'Royal Sherwani Set', description: 'Elegant sherwani with intricate embroidery for weddings.', price: 8999, sale_price: 12999, images: [{ url: '/cat-men.png' }] },
+        { id: 'dummy-men-2', name: 'Classic Kurta Pajama', description: 'Premium cotton kurta with comfortable pajama.', price: 2499, sale_price: 3499, images: [{ url: '/men-prod-1.png' }] },
+        { id: 'dummy-men-3', name: 'Designer Nehru Jacket', description: 'Modern nehru jacket with traditional touch.', price: 3999, sale_price: 5499, images: [{ url: '/men-prod-2.png' }] },
+        { id: 'dummy-men-4', name: 'Festive Dhoti Kurta', description: 'Traditional dhoti kurta for festive occasions.', price: 4599, sale_price: 6299, images: [{ url: '/men-prod-3.png' }] }
+      ],
+      women: [
+        { id: 'dummy-women-1', name: 'Banarasi Silk Saree', description: 'Handwoven Banarasi silk with gold zari work.', price: 7999, sale_price: 11999, images: [{ url: '/cat-women.png' }] },
+        { id: 'dummy-women-2', name: 'Kanjivaram Pattu Saree', description: 'Pure silk Kanjivaram with temple border.', price: 12999, sale_price: 18999, images: [{ url: '/women-prod-1.png' }] },
+        { id: 'dummy-women-3', name: 'Designer Lehenga', description: 'Bridal lehenga with heavy embroidery.', price: 24999, sale_price: 35999, images: [{ url: '/women-prod-2.png' }] },
+        { id: 'dummy-women-4', name: 'Cotton Handloom Saree', description: 'Lightweight cotton saree for daily wear.', price: 1999, sale_price: 2999, images: [{ url: '/women-prod-3.png' }] }
+      ],
+      kids: [
+        { id: 'dummy-kids-1', name: 'Kids Sherwani Set', description: 'Adorable sherwani set for little princes.', price: 2499, sale_price: 3499, images: [{ url: '/cat-kids.png' }] },
+        { id: 'dummy-kids-2', name: 'Girls Lehenga Choli', description: 'Colorful lehenga choli for festivals.', price: 1999, sale_price: 2799, images: [{ url: '/kids-prod-1.png' }] },
+        { id: 'dummy-kids-3', name: 'Boys Kurta Set', description: 'Comfortable kurta pajama for kids.', price: 1499, sale_price: 1999, images: [{ url: '/kids-prod-2.png' }] },
+        { id: 'dummy-kids-4', name: 'Kids Ethnic Dress', description: 'Traditional dress for special occasions.', price: 1799, sale_price: 2499, images: [{ url: '/kids-prod-3.png' }] }
+      ],
+      footwear: [
+        { id: 'dummy-footwear-1', name: 'Embroidered Jutti', description: 'Handcrafted jutti with mirror work.', price: 999, sale_price: 1499, images: [{ url: '/cat-footwear.png' }] },
+        { id: 'dummy-footwear-2', name: 'Leather Mojari', description: 'Traditional mojari with ethnic design.', price: 1299, sale_price: 1799, images: [{ url: '/footwear-prod-1.png' }] },
+        { id: 'dummy-footwear-3', name: 'Kolhapuri Chappal', description: 'Authentic Kolhapuri leather sandals.', price: 899, sale_price: 1299, images: [{ url: '/footwear-prod-2.png' }] },
+        { id: 'dummy-footwear-4', name: 'Bridal Jutti', description: 'Designer bridal jutti with stone work.', price: 1999, sale_price: 2799, images: [{ url: '/footwear-prod-3.png' }] }
+      ]
     };
 
-    if (['men', 'women', 'kids', 'footwear'].includes(category)) {
-      const imgs = mockImages[category];
-      return [
-        {
-          id: `mock-${category}-1`,
-          name: `Royal ${category.charAt(0).toUpperCase() + category.slice(1)} Ensemble`,
-          description: `Handcrafted elegance for the perfect look.`,
-          price: 4999,
-          sale_price: null,
-          images: [{ url: imgs[0] }]
-        },
-        {
-          id: `mock-${category}-2`,
-          name: `Classic ${category.charAt(0).toUpperCase() + category.slice(1)} Edition`,
-          description: `Premium quality ${category} wear for special occasions.`,
-          price: 2499,
-          sale_price: 1999,
-          images: [{ url: imgs[1] }]
-        },
-        {
-          id: `mock-${category}-3`,
-          name: `Modern ${category.charAt(0).toUpperCase() + category.slice(1)} Style`,
-          description: `Contemporary designs with traditional roots.`,
-          price: 3299,
-          sale_price: 2799,
-          images: [{ url: imgs[2] }]
-        },
-        {
-          id: `mock-${category}-4`,
-          name: `Festive ${category.charAt(0).toUpperCase() + category.slice(1)} Choice`,
-          description: `Celebrate in style with this exclusive piece.`,
-          price: 1599,
-          sale_price: null,
-          images: [{ url: imgs[3] }]
-        }
-      ];
-    }
-    return [];
+    return dummyData[category] || [];
   };
 
-  const displayedProducts = products.length > 0 ? products : getMockProducts();
+  // Show real products from API, or dummy products if none available
+  const displayedProducts = products.length > 0 ? products : getDummyProducts();
 
   return (
     <div className="px-3 sm:px-6 lg:px-8 py-6 sm:py-10">
@@ -221,74 +203,79 @@ const Products = () => {
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-            {displayedProducts.map((product) => (
-              <Link
-                key={product.id}
-                to={`/product/${product.id}`}
-                className="relative bg-background-light dark:bg-background-dark border border-secondary/20 rounded-lg overflow-hidden group hover:shadow-lg transition-all duration-300 flex flex-col"
-              >
-                <div
-                  className="bg-contain bg-center bg-no-repeat w-full h-80 transition-transform duration-300 group-hover:scale-105 bg-gray-50 dark:bg-gray-900 flex-shrink-0"
-                  style={{
-                    backgroundImage: product.images && product.images.length > 0
-                      ? `url('${product.images[0].url.startsWith('http') || product.images[0].url.startsWith('/')
-                        ? product.images[0].url
-                        : 'https://seashell-yak-534067.hostingersite.com/' + product.images[0].url
-                      }')`
-                      : 'linear-gradient(135deg, #F5E6D3 0%, #D4AF37 100%)'
-                  }}
+            {displayedProducts.map((product) => {
+              const isDummy = String(product.id).startsWith('dummy-');
+
+              return (
+                <Link
+                  key={product.id}
+                  to={`/product/${product.id}`}
+                  state={isDummy ? { dummyProduct: product } : undefined}
+                  className="relative bg-background-light dark:bg-background-dark border border-secondary/20 rounded-lg overflow-hidden group hover:shadow-lg transition-all duration-300 flex flex-col"
                 >
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      if (isInWishlist(product.id)) {
-                        removeFromWishlist(product.id);
-                      } else {
-                        addToWishlist(product);
-                      }
+                  <div
+                    className="bg-contain bg-center bg-no-repeat w-full h-80 transition-transform duration-300 group-hover:scale-105 bg-gray-50 dark:bg-gray-900 flex-shrink-0"
+                    style={{
+                      backgroundImage: product.images && product.images.length > 0
+                        ? `url('${product.images[0].url.startsWith('http') || product.images[0].url.startsWith('/')
+                          ? product.images[0].url
+                          : 'https://seashell-yak-534067.hostingersite.com/' + product.images[0].url
+                        }')`
+                        : 'linear-gradient(135deg, #F5E6D3 0%, #D4AF37 100%)'
                     }}
-                    className="absolute top-3 right-3 p-2 rounded-full hover:scale-110 transition-transform z-10"
-                    aria-label="Add to wishlist"
                   >
-                    <span
-                      className={`material-symbols-outlined text-3xl drop-shadow-lg ${isInWishlist(product.id)
-                        ? 'text-red-500'
-                        : 'text-white'
-                        }`}
-                      style={{ fontVariationSettings: isInWishlist(product.id) ? '"FILL" 1' : '"FILL" 0' }}
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (isInWishlist(product.id)) {
+                          removeFromWishlist(product.id);
+                        } else {
+                          addToWishlist(product);
+                        }
+                      }}
+                      className="absolute top-3 right-3 p-2 rounded-full hover:scale-110 transition-transform z-10"
+                      aria-label="Add to wishlist"
                     >
-                      favorite
-                    </span>
-                  </button>
-                </div>
-                <div className="p-3">
-                  <h3 className="text-sm font-bold font-display text-text-light dark:text-text-dark mb-1 line-clamp-1">
-                    {product.name}
-                  </h3>
-                  {product.description && (
-                    <p className="font-body text-text-light/80 dark:text-text-dark/80 mb-2 text-xs line-clamp-1">
-                      {product.description}
-                    </p>
-                  )}
-                  <div className="flex justify-between items-center mb-2">
-                    <div>
-                      <span className="text-base font-bold text-primary dark:text-secondary">
-                        ₹{parseFloat(product.price).toLocaleString()}
+                      <span
+                        className={`material-symbols-outlined text-3xl drop-shadow-lg ${isInWishlist(product.id)
+                          ? 'text-red-500'
+                          : 'text-white'
+                          }`}
+                        style={{ fontVariationSettings: isInWishlist(product.id) ? '"FILL" 1' : '"FILL" 0' }}
+                      >
+                        favorite
                       </span>
-                      {product.sale_price && (
-                        <span className="ml-1 text-xs text-gray-500 line-through">
-                          ₹{parseFloat(product.sale_price).toLocaleString()}
+                    </button>
+                  </div>
+                  <div className="p-3">
+                    <h3 className="text-sm font-bold font-display text-text-light dark:text-text-dark mb-1 line-clamp-1">
+                      {product.name}
+                    </h3>
+                    {product.description && (
+                      <p className="font-body text-text-light/80 dark:text-text-dark/80 mb-2 text-xs line-clamp-1">
+                        {product.description}
+                      </p>
+                    )}
+                    <div className="flex justify-between items-center mb-2">
+                      <div>
+                        <span className="text-base font-bold text-primary dark:text-secondary">
+                          ₹{parseFloat(product.price).toLocaleString()}
                         </span>
-                      )}
+                        {product.sale_price && (
+                          <span className="ml-1 text-xs text-gray-500 line-through">
+                            ₹{parseFloat(product.sale_price).toLocaleString()}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="bg-primary text-white dark:bg-secondary dark:text-primary px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-primary/90 dark:hover:bg-secondary/90 transition-colors w-full block text-center">
+                      View Details
                     </div>
                   </div>
-                  <div className="bg-primary text-white dark:bg-secondary dark:text-primary px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-primary/90 dark:hover:bg-secondary/90 transition-colors w-full block text-center">
-                    View Details
-                  </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </div>
         )}
 

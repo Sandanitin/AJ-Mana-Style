@@ -251,105 +251,77 @@ const Homepage = () => {
         <h2 className="text-primary dark:text-secondary text-3xl font-bold font-display leading-tight tracking-[-0.015em] text-center pb-6">
           Shop New Arrivals
         </h2>
-        <div ref={bestsellerScrollRef} className="overflow-x-auto pb-4 scrollbar-hide cursor-grab active:cursor-grabbing" style={{ scrollBehavior: 'smooth' }}>
-          <div className="flex gap-6" style={{ minWidth: 'min-content' }}>
-            {[
-              {
-                id: 'new-1',
-                name: 'Banarasi Special',
-                description: 'banarasi pattu saree made with soft silk',
-                price: 3456,
-                sale_price: 5678,
-                image: '/arrival-banarasi.png'
-              },
-              {
-                id: 'new-2',
-                name: "Women's Paithani Soft Silk Kadiyal Maharani Saree With Blouse Piece",
-                description: 'Handwoven with care and tradition',
-                price: 6299,
-                sale_price: 7999,
-                image: '/arrival-paithani.png'
-              },
-              {
-                id: 'new-3',
-                name: 'Pure Chanderi Banarasi Silk Saree with 3D digital Print',
-                description: 'Step into elegance with our Pure Chanderi Banarasi Silk Saree, featuring exquisite 3D digital print detailing.',
-                price: 7399,
-                sale_price: 10499,
-                image: '/arrival-chanderi.png'
-              },
-              {
-                id: 'new-4',
-                name: "BFM Indian Women's LInen Woven Design Zari Border Saree",
-                description: 'Elevate your ethnic wardrobe with this elegant Linen Blend Woven Design Zari Border Saree.',
-                price: 3799,
-                sale_price: 5299,
-                image: '/women-prod-2.png' // Fallback image
-              },
-              {
-                id: 'new-5',
-                name: "Women's Peach Organza Crush Pattern Saree",
-                description: 'Gorgeous Crush Pattern Completes the Saree. Lightweight and Cozy, Ideal for a Festival.',
-                price: 7699,
-                sale_price: 9499,
-                image: '/women-prod-3.png' // Fallback image
-              }
-            ].map((product, index) => (
-              <div key={product.id} className="relative flex-shrink-0 w-80">
-                <Link
-                  to={`/product/${product.id}`}
-                  className="bg-background-light dark:bg-background-dark border border-secondary/20 rounded-lg overflow-hidden group hover:shadow-lg transition-shadow flex flex-col h-full"
-                >
-                  <div
-                    className="bg-contain bg-center bg-no-repeat w-full h-72 bg-gray-50 dark:bg-gray-900 flex-shrink-0"
-                    style={{
-                      backgroundImage: `url('${product.image}')`
-                    }}
-                  ></div>
-                  <div className="p-4 flex flex-col flex-grow">
-                    <h3 className="text-lg font-bold font-display text-text-light dark:text-text-dark line-clamp-2 mb-1">{product.name}</h3>
-                    <p className="font-body text-text-light/80 dark:text-text-dark/80 text-sm line-clamp-2 mb-4">
-                      {product.description}
-                    </p>
-                    <div className="flex justify-between items-center mt-auto">
-                      <div className="flex-shrink-0">
-                        <span className="text-xl font-bold text-primary dark:text-secondary">₹{product.price.toLocaleString()}</span>
-                        {product.sale_price && (
-                          <span className="ml-2 text-sm text-text-light/60 line-through">₹{product.sale_price.toLocaleString()}</span>
-                        )}
+        {bestsellerProducts.length > 0 ? (
+          <div ref={bestsellerScrollRef} className="overflow-x-auto pb-4 scrollbar-hide cursor-grab active:cursor-grabbing" style={{ scrollBehavior: 'smooth' }}>
+            <div className="flex gap-6" style={{ minWidth: 'min-content' }}>
+              {bestsellerProducts.map((product) => {
+                // Get the product image URL
+                const imageUrl = product.images && product.images[0]
+                  ? (product.images[0].url.startsWith('http')
+                    ? product.images[0].url
+                    : `https://seashell-yak-534067.hostingersite.com/${product.images[0].url}`)
+                  : '/placeholder.jpg';
+
+                return (
+                  <div key={product.id} className="relative flex-shrink-0 w-80">
+                    <Link
+                      to={`/product/${product.id}`}
+                      className="bg-background-light dark:bg-background-dark border border-secondary/20 rounded-lg overflow-hidden group hover:shadow-lg transition-shadow flex flex-col h-full"
+                    >
+                      <div
+                        className="bg-contain bg-center bg-no-repeat w-full h-72 bg-gray-50 dark:bg-gray-900 flex-shrink-0"
+                        style={{
+                          backgroundImage: `url('${imageUrl}')`
+                        }}
+                      ></div>
+                      <div className="p-4 flex flex-col flex-grow">
+                        <h3 className="text-lg font-bold font-display text-text-light dark:text-text-dark line-clamp-2 mb-1">{product.name}</h3>
+                        <p className="font-body text-text-light/80 dark:text-text-dark/80 text-sm line-clamp-2 mb-4">
+                          {product.description}
+                        </p>
+                        <div className="flex justify-between items-center mt-auto">
+                          <div className="flex-shrink-0">
+                            <span className="text-xl font-bold text-primary dark:text-secondary">₹{parseFloat(product.price).toLocaleString('en-IN')}</span>
+                            {product.sale_price && (
+                              <span className="ml-2 text-sm text-text-light/60 line-through">₹{parseFloat(product.sale_price).toLocaleString('en-IN')}</span>
+                            )}
+                          </div>
+                          <button className="bg-primary text-white dark:bg-secondary dark:text-primary px-4 py-2 rounded-lg text-sm font-bold hover:bg-primary/90 dark:hover:bg-secondary/90 transition-colors whitespace-nowrap flex-shrink-0">
+                            View Details
+                          </button>
+                        </div>
                       </div>
-                      <button className="bg-primary text-white dark:bg-secondary dark:text-primary px-4 py-2 rounded-lg text-sm font-bold hover:bg-primary/90 dark:hover:bg-secondary/90 transition-colors whitespace-nowrap flex-shrink-0">
-                        View Details
-                      </button>
-                    </div>
+                    </Link>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (isInWishlist(product.id)) {
+                          removeFromWishlist(product.id);
+                        } else {
+                          addToWishlist(product);
+                        }
+                      }}
+                      className="absolute top-3 right-3 p-2 rounded-full hover:scale-110 transition-transform"
+                      aria-label="Add to wishlist"
+                    >
+                      <span
+                        className={`material-symbols-outlined text-3xl drop-shadow-lg ${isInWishlist(product.id)
+                          ? 'text-red-500'
+                          : 'text-white'
+                          }`}
+                        style={{ fontVariationSettings: isInWishlist(product.id) ? '"FILL" 1' : '"FILL" 0' }}
+                      >
+                        favorite
+                      </span>
+                    </button>
                   </div>
-                </Link>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    if (isInWishlist(product.id)) {
-                      removeFromWishlist(product.id);
-                    } else {
-                      addToWishlist(product);
-                    }
-                  }}
-                  className="absolute top-3 right-3 p-2 rounded-full hover:scale-110 transition-transform"
-                  aria-label="Add to wishlist"
-                >
-                  <span
-                    className={`material-symbols-outlined text-3xl drop-shadow-lg ${isInWishlist(product.id)
-                        ? 'text-red-500'
-                        : 'text-white'
-                      }`}
-                    style={{ fontVariationSettings: isInWishlist(product.id) ? '"FILL" 1' : '"FILL" 0' }}
-                  >
-                    favorite
-                  </span>
-                </button>
-              </div>
-            ))}
+                );
+              })}
+            </div>
           </div>
-        </div>
+        ) : (
+          <p className="text-center text-text-light/60 dark:text-text-dark/60 font-body">Loading products...</p>
+        )}
       </section>
 
       {/* Value Proposition */}
