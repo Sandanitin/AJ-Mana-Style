@@ -1,7 +1,7 @@
 {
   "name": "vastrani-looms-frontend",
   "version": "1.0.0",
-  "description": "Frontend for Vastrani Looms saree business website",
+  "description": "Frontend for AJ-Mana Style saree business website",
   "private": true,
   "dependencies": {
     "@react-oauth/google": "^0.12.2",

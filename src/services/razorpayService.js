@@ -3,7 +3,7 @@ class RazorpayService {
   constructor() {
     this.razorpayKeyId = process.env.REACT_APP_RAZORPAY_KEY_ID || 'rzp_test_Rl6n2UDTYOJBev' //'rzp_live_RmnF4unYS9Egta';
     this.apiBaseUrl = process.env.REACT_APP_API_URL || 'https://seashell-yak-534067.hostingersite.com/backend/api';
-    
+
     // Debug logging
     console.log('Razorpay Key ID:', this.razorpayKeyId);
     console.log('API Base URL:', this.apiBaseUrl);
@@ -31,7 +31,7 @@ class RazorpayService {
       const url = `${this.apiBaseUrl}/create-order.php`;
       console.log('Creating order with URL:', url);
       console.log('Order data:', orderData);
-      
+
       const response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -41,7 +41,7 @@ class RazorpayService {
       });
 
       console.log('Response status:', response.status);
-      
+
       if (!response.ok) {
         const errorText = await response.text();
         console.error('Server error response:', errorText);
@@ -101,7 +101,7 @@ class RazorpayService {
         key: this.razorpayKeyId,
         amount: amount, // Amount in paise
         currency: currency,
-        name: 'Vastrani Looms',
+        name: 'AJ-Mana Style',
         description: 'Handloom Sarees & Textiles',
         image: '/Logo_Transparent.png',
         order_id: orderId,

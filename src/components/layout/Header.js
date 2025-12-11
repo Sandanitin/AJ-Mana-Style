@@ -128,72 +128,42 @@ const Header = () => {
               <span className="material-symbols-outlined text-xs lg:text-sm">keyboard_arrow_down</span>
             </Link>
 
-            {/* Mega Menu Dropdown */}
+            {/* Simple Dropdown */}
             {isShopDropdownOpen && (
               <div
-                className="absolute top-full left-1/2 transform -translate-x-1/2 w-[280px] sm:w-[400px] md:w-[600px] lg:w-[800px] xl:w-[900px] bg-background-light dark:bg-background-dark border border-secondary/30 rounded-lg shadow-xl z-50 p-3 sm:p-4 md:p-5 lg:p-6"
+                className="absolute top-full left-0 w-48 bg-background-light dark:bg-background-dark border border-secondary/30 rounded-lg shadow-xl z-50 py-2"
                 style={{ marginTop: '0.5rem' }}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
               >
-                <div className="flex flex-col lg:flex-row">
-                  {/* Shop By Type Column */}
-                  <div className="hidden lg:block border-r border-secondary/20 pr-3 mr-6 min-w-[120px]">
-                    <h3 className="text-primary dark:text-secondary text-xs font-bold font-display mb-2 md:mb-3">
-                      SHOP BY TYPE
-                    </h3>
-                  </div>
-
-                  {/* Collections and Categories Container */}
-                  <div className="flex flex-col sm:flex-row gap-6 flex-1">
-                    {/* Collections Column */}
-                    <div className="flex-1">
-                      <h3 className="text-primary dark:text-secondary text-xs font-bold font-display mb-2 md:mb-3">
-                        COLLECTION
-                      </h3>
-                      <div className="space-y-0.5 sm:space-y-1">
-                        {collections.map((collection, index) => (
-                          <Link
-                            key={index}
-                            to={`/products?collection=${encodeURIComponent(collection)}`}
-                            className="block text-text-light dark:text-text-dark text-[10px] sm:text-xs font-body leading-relaxed hover:text-secondary hover:bg-primary/5 dark:hover:bg-secondary/5 px-1 sm:px-2 py-0.5 sm:py-1 rounded transition-colors"
-                          >
-                            {collection}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Categories Column */}
-                    <div className="flex-1">
-                      <h3 className="text-primary dark:text-secondary text-xs font-bold font-display mb-2 md:mb-3">
-                        CATEGORY
-                      </h3>
-                      <div className="space-y-0.5 sm:space-y-1">
-                        {categories.map((category, index) => (
-                          <Link
-                            key={index}
-                            to={`/products?category=${encodeURIComponent(category)}`}
-                            className="block text-text-light dark:text-text-dark text-[10px] sm:text-xs font-body leading-relaxed hover:text-secondary hover:bg-primary/5 dark:hover:bg-secondary/5 px-1 sm:px-2 py-0.5 sm:py-1 rounded transition-colors"
-                          >
-                            {category}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* View All Link */}
-                <div className="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-secondary/20 text-center">
-                  <Link
-                    to="/products"
-                    className="inline-flex items-center gap-1 sm:gap-2 bg-primary text-white dark:bg-secondary dark:text-primary px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-[10px] sm:text-xs font-bold font-body hover:bg-primary/90 dark:hover:bg-secondary/90 transition-colors"
-                  >
-                    View All Products
-                    <span className="material-symbols-outlined text-[10px] sm:text-xs">arrow_forward</span>
-                  </Link>
-                </div>
+                <Link
+                  to="/products?category=men"
+                  onClick={() => setIsShopDropdownOpen(false)}
+                  className="block px-4 py-2 text-sm font-body text-text-light dark:text-text-dark hover:bg-primary/10 dark:hover:bg-secondary/10 hover:text-secondary transition-colors"
+                >
+                  Men
+                </Link>
+                <Link
+                  to="/products?category=women"
+                  onClick={() => setIsShopDropdownOpen(false)}
+                  className="block px-4 py-2 text-sm font-body text-text-light dark:text-text-dark hover:bg-primary/10 dark:hover:bg-secondary/10 hover:text-secondary transition-colors"
+                >
+                  Women
+                </Link>
+                <Link
+                  to="/products?category=kids"
+                  onClick={() => setIsShopDropdownOpen(false)}
+                  className="block px-4 py-2 text-sm font-body text-text-light dark:text-text-dark hover:bg-primary/10 dark:hover:bg-secondary/10 hover:text-secondary transition-colors"
+                >
+                  Kids
+                </Link>
+                <Link
+                  to="/products?category=footwear"
+                  onClick={() => setIsShopDropdownOpen(false)}
+                  className="block px-4 py-2 text-sm font-body text-text-light dark:text-text-dark hover:bg-primary/10 dark:hover:bg-secondary/10 hover:text-secondary transition-colors"
+                >
+                  Footwear
+                </Link>
               </div>
             )}
           </div>
@@ -553,102 +523,50 @@ const Header = () => {
                 <h3 className="text-2xl font-display font-bold text-primary dark:text-secondary">Shop</h3>
               </div>
 
-              {/* Shop Content */}
+              {/* Shop Content - Simple Links */}
               <div className="p-5">
-                {!mobileExpandedSection ? (
-                  // Level 1: Main Shop Options
-                  <div className="space-y-2">
-                    {/* Shop By Type - Direct Link */}
-                    <Link
-                      className="block text-text-light dark:text-text-dark text-lg font-medium font-body leading-normal hover:text-secondary py-4 border-b border-secondary/10"
-                      to="/products"
-                      onClick={() => {
-                        setIsMobileMenuOpen(false);
-                        setMobileShopExpanded(false);
-                        setMobileExpandedSection(null);
-                      }}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span>View All Products</span>
-                        <span className="material-symbols-outlined text-xl">arrow_forward</span>
-                      </div>
-                    </Link>
-
-                    {/* Collection - Expandable */}
-                    <button
-                      className="w-full text-left text-text-light dark:text-text-dark text-lg font-medium font-body leading-normal hover:text-secondary py-4 border-b border-secondary/10"
-                      onClick={() => setMobileExpandedSection('collections')}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span>Collections</span>
-                        <span className="material-symbols-outlined text-xl">keyboard_arrow_right</span>
-                      </div>
-                    </button>
-
-                    {/* Category - Expandable */}
-                    <button
-                      className="w-full text-left text-text-light dark:text-text-dark text-lg font-medium font-body leading-normal hover:text-secondary py-4"
-                      onClick={() => setMobileExpandedSection('categories')}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span>Categories</span>
-                        <span className="material-symbols-outlined text-xl">keyboard_arrow_right</span>
-                      </div>
-                    </button>
-                  </div>
-                ) : (
-                  // Level 2: Expanded Lists
-                  <div className="space-y-1">
-                    {/* Back to Shop Options */}
-                    <button
-                      className="flex items-center gap-2 text-secondary text-base font-body mb-4 py-2"
-                      onClick={() => setMobileExpandedSection(null)}
-                    >
-                      <span className="material-symbols-outlined text-xl">arrow_back</span>
-                      Back
-                    </button>
-
-                    {mobileExpandedSection === 'collections' && (
-                      <>
-                        <h4 className="text-primary dark:text-secondary text-base font-bold font-display mb-4 uppercase">Collections</h4>
-                        {collections.map((collection, index) => (
-                          <Link
-                            key={index}
-                            className="block text-text-light dark:text-text-dark text-base font-body leading-relaxed hover:text-secondary hover:bg-primary/5 dark:hover:bg-secondary/5 px-3 py-3 rounded"
-                            to={`/products?collection=${encodeURIComponent(collection)}`}
-                            onClick={() => {
-                              setIsMobileMenuOpen(false);
-                              setMobileShopExpanded(false);
-                              setMobileExpandedSection(null);
-                            }}
-                          >
-                            {collection}
-                          </Link>
-                        ))}
-                      </>
-                    )}
-
-                    {mobileExpandedSection === 'categories' && (
-                      <>
-                        <h4 className="text-primary dark:text-secondary text-base font-bold font-display mb-4 uppercase">Categories</h4>
-                        {categories.map((category, index) => (
-                          <Link
-                            key={index}
-                            className="block text-text-light dark:text-text-dark text-base font-body leading-relaxed hover:text-secondary hover:bg-primary/5 dark:hover:bg-secondary/5 px-3 py-3 rounded"
-                            to={`/products?category=${encodeURIComponent(category)}`}
-                            onClick={() => {
-                              setIsMobileMenuOpen(false);
-                              setMobileShopExpanded(false);
-                              setMobileExpandedSection(null);
-                            }}
-                          >
-                            {category}
-                          </Link>
-                        ))}
-                      </>
-                    )}
-                  </div>
-                )}
+                <div className="space-y-2">
+                  <Link
+                    className="block text-text-light dark:text-text-dark text-lg font-medium font-body leading-normal hover:text-secondary py-4 border-b border-secondary/10"
+                    to="/products?category=men"
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      setMobileShopExpanded(false);
+                    }}
+                  >
+                    Men
+                  </Link>
+                  <Link
+                    className="block text-text-light dark:text-text-dark text-lg font-medium font-body leading-normal hover:text-secondary py-4 border-b border-secondary/10"
+                    to="/products?category=women"
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      setMobileShopExpanded(false);
+                    }}
+                  >
+                    Women
+                  </Link>
+                  <Link
+                    className="block text-text-light dark:text-text-dark text-lg font-medium font-body leading-normal hover:text-secondary py-4 border-b border-secondary/10"
+                    to="/products?category=kids"
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      setMobileShopExpanded(false);
+                    }}
+                  >
+                    Kids
+                  </Link>
+                  <Link
+                    className="block text-text-light dark:text-text-dark text-lg font-medium font-body leading-normal hover:text-secondary py-4"
+                    to="/products?category=footwear"
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      setMobileShopExpanded(false);
+                    }}
+                  >
+                    Footwear
+                  </Link>
+                </div>
               </div>
             </div>
           )}

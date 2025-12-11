@@ -180,7 +180,7 @@ const Footer = () => {
         </div>
 
         <div className="text-center text-sm mt-10 pt-6 border-t border-secondary/30">
-          <p>© 2024 <a href="/" className="font-bold hover:text-primary dark:hover:text-secondary transition-colors">AJ-Mana Style</a>. All Rights Reserved. | Designed and Developed by <a href="https://www.vikrin.com" target="_blank" rel="noopener noreferrer" className="font-bold hover:text-primary dark:hover:text-secondary cursor-pointer transition-colors">Vikrin</a></p>
+          <p>© 2024 <a href="/" className="font-bold hover:text-primary dark:hover:text-secondary transition-colors">AJ-Mana Style</a>. All Rights Reserved. | Designed and Developed by <a href="https://subhash-medarametla.vercel.app/" target="_blank" rel="noopener noreferrer" className="font-bold hover:text-primary dark:hover:text-secondary cursor-pointer transition-colors">subhash medarametla</a></p>
         </div>
       </footer>
 

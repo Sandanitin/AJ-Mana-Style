@@ -57,7 +57,7 @@ const Contact = () => {
     } catch (error) {
       console.error('Contact form error:', error);
       setSubmitStatus('error');
-      setStatusMessage('Unable to send your message. Please try again or contact us directly at chaitanya@vastranilooms.com');
+      setStatusMessage('Unable to send your message. Please try again or contact us directly at AJManaStyle@gmail.com');
     } finally {
       setLoading(false);
       // Auto-hide status message after 5 seconds
@@ -75,7 +75,7 @@ const Contact = () => {
           We're here to help — always.
         </h1>
         <p className="text-center text-text-light/80 dark:text-text-dark/80 font-body text-sm mb-10 max-w-2xl mx-auto">
-          At Vastrāni, customer experience comes first. Whether you have a question, need styling guidance, want help with an order, or simply wish to say hello — we're just a message away.
+          At AJ-Mana Style, customer experience comes first. Whether you have a question, need styling guidance, want help with an order, or simply wish to say hello — we're just a message away.
         </p>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -207,7 +207,7 @@ const Contact = () => {
                   <span className="material-symbols-outlined text-secondary mt-1">phone</span>
                   <div>
                     <p className="font-semibold">Phone Support</p>
-                    <p className="font-bold text-lg">+91 720 438 7779</p>
+                    <p className="font-bold text-lg">+91 7203544487</p>
                     <p className="text-sm mt-1">Available: 10:00 AM – 6:00 PM (IST)<br />Monday to Saturday</p>
                   </div>
                 </div>
@@ -216,7 +216,7 @@ const Contact = () => {
                   <span className="material-symbols-outlined text-secondary mt-1">email</span>
                   <div>
                     <p className="font-semibold">Email Support</p>
-                    <p className="font-bold text-lg">chaitanya@vastranilooms.com</p>
+                    <p className="font-bold text-lg">AJManaStyle@gmail.com</p>
                     <p className="text-sm mt-1">We typically respond within 24 hours on business days.</p>
                   </div>
                 </div>

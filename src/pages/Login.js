@@ -25,7 +25,7 @@ const Login = () => {
   const [error, setError] = useState('');
   const [resendTimer, setResendTimer] = useState(0);
   const navigate = useNavigate();
-  
+
   const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://seashell-yak-534067.hostingersite.com/backend/api';
 
   // Timer for resend OTP
@@ -39,12 +39,12 @@ const Login = () => {
   const handleOtpChange = (index, value) => {
     if (value.length > 1) value = value.charAt(0);
     if (!/^\d*$/.test(value)) return;
-    
+
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
     setError('');
-    
+
     // Auto-focus next input
     if (value && index < 5) {
       document.getElementById(`otp-${index + 1}`)?.focus();
@@ -61,10 +61,10 @@ const Login = () => {
     e.preventDefault();
     const pastedData = e.clipboardData.getData('text').slice(0, 6);
     if (!/^\d+$/.test(pastedData)) return;
-    
+
     const newOtp = pastedData.split('').concat(Array(6).fill('')).slice(0, 6);
     setOtp(newOtp);
-    
+
     // Focus last filled input
     const lastIndex = Math.min(pastedData.length, 5);
     document.getElementById(`otp-${lastIndex}`)?.focus();
@@ -76,10 +76,10 @@ const Login = () => {
       setError('Please enter the complete 6-digit OTP');
       return;
     }
-    
+
     setLoading(true);
     setError('');
-    
+
     try {
       const response = await fetch(`${API_BASE_URL}/auth.php?action=verify-otp`, {
         method: 'POST',
@@ -87,9 +87,9 @@ const Login = () => {
         credentials: 'include',
         body: JSON.stringify({ email: otpEmail, otp: otpCode })
       });
-      
+
       const result = await response.json();
-      
+
       if (result.success) {
         localStorage.setItem('user', JSON.stringify(result.user));
         navigate('/');
@@ -107,10 +107,10 @@ const Login = () => {
 
   const resendOTP = async () => {
     if (resendTimer > 0) return;
-    
+
     setLoading(true);
     setError('');
-    
+
     try {
       const response = await fetch(`${API_BASE_URL}/auth.php?action=resend-otp`, {
         method: 'POST',
@@ -118,9 +118,9 @@ const Login = () => {
         credentials: 'include',
         body: JSON.stringify({ email: otpEmail })
       });
-      
+
       const result = await response.json();
-      
+
       if (result.success) {
         setOtp(['', '', '', '', '', '']);
         setResendTimer(60);
@@ -141,16 +141,16 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    
+
     try {
       const response = await fetch(`${API_BASE_URL}/auth.php?action=forgot-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: resetEmail })
       });
-      
+
       const result = await response.json();
-      
+
       if (result.success) {
         setOtpEmail(resetEmail);
         setShowForgotPassword(false);
@@ -169,26 +169,26 @@ const Login = () => {
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
-    
+
     if (resetPasswordData.newPassword !== resetPasswordData.confirmPassword) {
       setError('Passwords do not match');
       return;
     }
-    
+
     if (resetPasswordData.newPassword.length < 6) {
       setError('Password must be at least 6 characters');
       return;
     }
-    
+
     const otpCode = otp.join('');
     if (otpCode.length !== 6) {
       setError('Please enter the complete 6-digit code');
       return;
     }
-    
+
     setLoading(true);
     setError('');
-    
+
     try {
       const response = await fetch(`${API_BASE_URL}/auth.php?action=reset-password`, {
         method: 'POST',
@@ -199,9 +199,9 @@ const Login = () => {
           newPassword: resetPasswordData.newPassword
         })
       });
-      
+
       const result = await response.json();
-      
+
       if (result.success) {
         alert('Password reset successful! Please login with your new password.');
         setShowResetPassword(false);
@@ -231,7 +231,7 @@ const Login = () => {
   const handleGoogleSuccess = async (credentialResponse) => {
     setLoading(true);
     setError('');
-    
+
     try {
       const response = await fetch(`${API_BASE_URL}/auth.php?action=google-login`, {
         method: 'POST',
@@ -239,9 +239,9 @@ const Login = () => {
         credentials: 'include',
         body: JSON.stringify({ credential: credentialResponse.credential })
       });
-      
+
       const result = await response.json();
-      
+
       if (result.success) {
         localStorage.setItem('user', JSON.stringify(result.user));
         navigate('/');
@@ -264,7 +264,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
+
     // Check for static admin credentials
     if (isLogin && formData.email === 'admin' && formData.password === 'admin@123') {
       // Static admin login
@@ -274,47 +274,47 @@ const Login = () => {
         email: 'admin@vastrani.com',
         role: 'admin'
       };
-      
+
       localStorage.setItem('adminUser', JSON.stringify(adminUser));
       localStorage.setItem('adminToken', 'admin-token');
-      
+
       // Redirect to admin panel
       navigate('/admin');
       return;
     }
-    
+
     // Validation
     if (!isLogin && formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       return;
     }
-    
+
     if (formData.password.length < 6) {
       setError('Password must be at least 6 characters');
       return;
     }
-    
+
     setLoading(true);
-    
+
     try {
       const endpoint = isLogin ? 'login' : 'register';
-      const payload = isLogin 
+      const payload = isLogin
         ? { email: formData.email, password: formData.password }
         : { name: formData.name, email: formData.email, password: formData.password, phone: formData.phone };
-      
+
       const response = await fetch(`${API_BASE_URL}/auth.php?action=${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify(payload)
       });
-      
+
       const result = await response.json();
-      
+
       if (result.success) {
         // Store user in localStorage
         localStorage.setItem('user', JSON.stringify(result.user));
-        
+
         // Redirect to homepage
         navigate('/');
         window.location.reload(); // Reload to update header
@@ -341,18 +341,18 @@ const Login = () => {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-3">
-            <img 
-              src="/Logo_Transparent.png" 
-              alt="Vastrani Looms" 
+            <img
+              src="/Logo_Transparent.png"
+              alt="AJ-Mana Style"
               className="h-16 w-16 object-contain"
             />
             <h1 className="text-3xl font-bold font-display text-primary dark:text-secondary">
-              Vastrani Looms
+              AJ-Mana Style
             </h1>
           </Link>
           <p className="mt-2 text-sm font-body text-text-light/70 dark:text-text-dark/70">
-            {showOTPScreen 
-              ? 'Enter the OTP sent to your email' 
+            {showOTPScreen
+              ? 'Enter the OTP sent to your email'
               : (isLogin ? 'Welcome back! Sign in to your account' : 'Create your account to get started')
             }
           </p>
@@ -418,8 +418,8 @@ const Login = () => {
                 disabled={resendTimer > 0 || loading}
                 className="text-sm font-body text-primary dark:text-secondary hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {resendTimer > 0 
-                  ? `Resend OTP in ${resendTimer}s` 
+                {resendTimer > 0
+                  ? `Resend OTP in ${resendTimer}s`
                   : 'Resend OTP'
                 }
               </button>
@@ -590,8 +590,8 @@ const Login = () => {
                   disabled={resendTimer > 0 || loading}
                   className="text-sm font-body text-primary dark:text-secondary hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {resendTimer > 0 
-                    ? `Resend code in ${resendTimer}s` 
+                  {resendTimer > 0
+                    ? `Resend code in ${resendTimer}s`
                     : 'Resend code'
                   }
                 </button>
@@ -615,188 +615,186 @@ const Login = () => {
         ) : (
           /* Login/Register Form */
           <>
-        {/* Form Card */}
-        <div className="decorative-frame bg-background-light dark:bg-background-dark p-8 rounded-lg shadow-xl">
-          {/* Toggle Buttons */}
-          <div className="flex gap-2 mb-6 bg-primary/5 dark:bg-secondary/5 p-1 rounded-lg">
-            <button
-              onClick={() => {
-                setIsLogin(true);
-                setError('');
-              }}
-              className={`flex-1 py-2 px-4 rounded-md font-semibold font-body transition-all ${
-                isLogin
-                  ? 'bg-primary text-white dark:bg-secondary dark:text-primary shadow-md'
-                  : 'text-text-light dark:text-text-dark hover:bg-primary/10 dark:hover:bg-secondary/10'
-              }`}
-            >
-              Login
-            </button>
-            <button
-              onClick={() => {
-                setIsLogin(false);
-                setError('');
-              }}
-              className={`flex-1 py-2 px-4 rounded-md font-semibold font-body transition-all ${
-                !isLogin
-                  ? 'bg-primary text-white dark:bg-secondary dark:text-primary shadow-md'
-                  : 'text-text-light dark:text-text-dark hover:bg-primary/10 dark:hover:bg-secondary/10'
-              }`}
-            >
-              Sign Up
-            </button>
-          </div>
-
-          {/* Error Message */}
-          {error && (
-            <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-400 rounded-lg text-sm">
-              {error}
-            </div>
-          )}
-
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {!isLogin && (
-              <div>
-                <label className="block text-sm font-medium font-body text-text-light dark:text-text-dark mb-2">
-                  Full Name *
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  required
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 border border-primary/30 dark:border-secondary/30 rounded-lg bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark focus:ring-2 focus:ring-primary dark:focus:ring-secondary focus:border-transparent"
-                  placeholder="Enter your full name"
-                />
-              </div>
-            )}
-
-            <div>
-              <label className="block text-sm font-medium font-body text-text-light dark:text-text-dark mb-2">
-                {isLogin ? 'Email or Username *' : 'Email Address *'}
-              </label>
-              <input
-                type={isLogin ? "text" : "email"}
-                name="email"
-                required
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-primary/30 dark:border-secondary/30 rounded-lg bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark focus:ring-2 focus:ring-primary dark:focus:ring-secondary focus:border-transparent"
-                placeholder={isLogin ? "Enter your email or username" : "Enter your email"}
-              />
-            </div>
-
-            {!isLogin && (
-              <div>
-                <label className="block text-sm font-medium font-body text-text-light dark:text-text-dark mb-2">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 border border-primary/30 dark:border-secondary/30 rounded-lg bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark focus:ring-2 focus:ring-primary dark:focus:ring-secondary focus:border-transparent"
-                  placeholder="Enter your phone number"
-                />
-              </div>
-            )}
-
-            <div>
-              <label className="block text-sm font-medium font-body text-text-light dark:text-text-dark mb-2">
-                Password *
-              </label>
-              <input
-                type="password"
-                name="password"
-                required
-                value={formData.password}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-primary/30 dark:border-secondary/30 rounded-lg bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark focus:ring-2 focus:ring-primary dark:focus:ring-secondary focus:border-transparent"
-                placeholder="Enter your password"
-              />
-            </div>
-
-            {!isLogin && (
-              <div>
-                <label className="block text-sm font-medium font-body text-text-light dark:text-text-dark mb-2">
-                  Confirm Password *
-                </label>
-                <input
-                  type="password"
-                  name="confirmPassword"
-                  required
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 border border-primary/30 dark:border-secondary/30 rounded-lg bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark focus:ring-2 focus:ring-primary dark:focus:ring-secondary focus:border-transparent"
-                  placeholder="Confirm your password"
-                />
-              </div>
-            )}
-
-            {isLogin && (
-              <div className="flex items-center justify-between text-sm">
-                <label className="flex items-center">
-                  <input type="checkbox" className="mr-2" />
-                  <span className="font-body text-text-light dark:text-text-dark">Remember me</span>
-                </label>
-                <button 
-                  type="button" 
+            {/* Form Card */}
+            <div className="decorative-frame bg-background-light dark:bg-background-dark p-8 rounded-lg shadow-xl">
+              {/* Toggle Buttons */}
+              <div className="flex gap-2 mb-6 bg-primary/5 dark:bg-secondary/5 p-1 rounded-lg">
+                <button
                   onClick={() => {
-                    setShowForgotPassword(true);
+                    setIsLogin(true);
                     setError('');
                   }}
-                  className="font-body text-primary dark:text-secondary hover:underline"
+                  className={`flex-1 py-2 px-4 rounded-md font-semibold font-body transition-all ${isLogin
+                      ? 'bg-primary text-white dark:bg-secondary dark:text-primary shadow-md'
+                      : 'text-text-light dark:text-text-dark hover:bg-primary/10 dark:hover:bg-secondary/10'
+                    }`}
                 >
-                  Forgot password?
+                  Login
+                </button>
+                <button
+                  onClick={() => {
+                    setIsLogin(false);
+                    setError('');
+                  }}
+                  className={`flex-1 py-2 px-4 rounded-md font-semibold font-body transition-all ${!isLogin
+                      ? 'bg-primary text-white dark:bg-secondary dark:text-primary shadow-md'
+                      : 'text-text-light dark:text-text-dark hover:bg-primary/10 dark:hover:bg-secondary/10'
+                    }`}
+                >
+                  Sign Up
                 </button>
               </div>
-            )}
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 bg-primary text-white dark:bg-secondary dark:text-primary rounded-lg font-semibold font-body hover:bg-primary/90 dark:hover:bg-secondary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? 'Please wait...' : (isLogin ? 'Sign In' : 'Create Account')}
-            </button>
-          </form>
+              {/* Error Message */}
+              {error && (
+                <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-400 rounded-lg text-sm">
+                  {error}
+                </div>
+              )}
 
-          {/* Social Login */}
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-primary/20 dark:border-secondary/20"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-background-light dark:bg-background-dark font-body text-text-light/70 dark:text-text-dark/70">
-                  Or continue with
-                </span>
+              {/* Form */}
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {!isLogin && (
+                  <div>
+                    <label className="block text-sm font-medium font-body text-text-light dark:text-text-dark mb-2">
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      required
+                      value={formData.name}
+                      onChange={handleChange}
+                      className="w-full px-4 py-2 border border-primary/30 dark:border-secondary/30 rounded-lg bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark focus:ring-2 focus:ring-primary dark:focus:ring-secondary focus:border-transparent"
+                      placeholder="Enter your full name"
+                    />
+                  </div>
+                )}
+
+                <div>
+                  <label className="block text-sm font-medium font-body text-text-light dark:text-text-dark mb-2">
+                    {isLogin ? 'Email or Username *' : 'Email Address *'}
+                  </label>
+                  <input
+                    type={isLogin ? "text" : "email"}
+                    name="email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border border-primary/30 dark:border-secondary/30 rounded-lg bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark focus:ring-2 focus:ring-primary dark:focus:ring-secondary focus:border-transparent"
+                    placeholder={isLogin ? "Enter your email or username" : "Enter your email"}
+                  />
+                </div>
+
+                {!isLogin && (
+                  <div>
+                    <label className="block text-sm font-medium font-body text-text-light dark:text-text-dark mb-2">
+                      Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className="w-full px-4 py-2 border border-primary/30 dark:border-secondary/30 rounded-lg bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark focus:ring-2 focus:ring-primary dark:focus:ring-secondary focus:border-transparent"
+                      placeholder="Enter your phone number"
+                    />
+                  </div>
+                )}
+
+                <div>
+                  <label className="block text-sm font-medium font-body text-text-light dark:text-text-dark mb-2">
+                    Password *
+                  </label>
+                  <input
+                    type="password"
+                    name="password"
+                    required
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border border-primary/30 dark:border-secondary/30 rounded-lg bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark focus:ring-2 focus:ring-primary dark:focus:ring-secondary focus:border-transparent"
+                    placeholder="Enter your password"
+                  />
+                </div>
+
+                {!isLogin && (
+                  <div>
+                    <label className="block text-sm font-medium font-body text-text-light dark:text-text-dark mb-2">
+                      Confirm Password *
+                    </label>
+                    <input
+                      type="password"
+                      name="confirmPassword"
+                      required
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      className="w-full px-4 py-2 border border-primary/30 dark:border-secondary/30 rounded-lg bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark focus:ring-2 focus:ring-primary dark:focus:ring-secondary focus:border-transparent"
+                      placeholder="Confirm your password"
+                    />
+                  </div>
+                )}
+
+                {isLogin && (
+                  <div className="flex items-center justify-between text-sm">
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="font-body text-text-light dark:text-text-dark">Remember me</span>
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowForgotPassword(true);
+                        setError('');
+                      }}
+                      className="font-body text-primary dark:text-secondary hover:underline"
+                    >
+                      Forgot password?
+                    </button>
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full py-3 bg-primary text-white dark:bg-secondary dark:text-primary rounded-lg font-semibold font-body hover:bg-primary/90 dark:hover:bg-secondary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {loading ? 'Please wait...' : (isLogin ? 'Sign In' : 'Create Account')}
+                </button>
+              </form>
+
+              {/* Social Login */}
+              <div className="mt-6">
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-primary/20 dark:border-secondary/20"></div>
+                  </div>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="px-2 bg-background-light dark:bg-background-dark font-body text-text-light/70 dark:text-text-dark/70">
+                      Or continue with
+                    </span>
+                  </div>
+                </div>
+
+                <div className="mt-4">
+                  <GoogleLogin
+                    onSuccess={handleGoogleSuccess}
+                    onError={handleGoogleError}
+                    theme="outline"
+                    size="large"
+                    width="100%"
+                    text={isLogin ? "signin_with" : "signup_with"}
+                  />
+                </div>
               </div>
             </div>
 
-            <div className="mt-4">
-              <GoogleLogin
-                onSuccess={handleGoogleSuccess}
-                onError={handleGoogleError}
-                theme="outline"
-                size="large"
-                width="100%"
-                text={isLogin ? "signin_with" : "signup_with"}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Footer Link */}
-        <p className="mt-6 text-center text-sm font-body text-text-light/70 dark:text-text-dark/70">
-          <Link to="/" className="text-primary dark:text-secondary hover:underline">
-            ← Back to Home
-          </Link>
-        </p>
-        </>
+            {/* Footer Link */}
+            <p className="mt-6 text-center text-sm font-body text-text-light/70 dark:text-text-dark/70">
+              <Link to="/" className="text-primary dark:text-secondary hover:underline">
+                ← Back to Home
+              </Link>
+            </p>
+          </>
         )}
       </div>
     </div>

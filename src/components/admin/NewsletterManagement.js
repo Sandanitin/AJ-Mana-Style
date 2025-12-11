@@ -8,14 +8,14 @@ const NewsletterManagement = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('subscribers'); // subscribers, campaigns, create
   const [stats, setStats] = useState({ total: 0, active: 0 });
-  
+
   // Campaign form state
   const [campaignForm, setCampaignForm] = useState({
     subject: '',
     content: '',
     type: 'promotional'
   });
-  
+
   const [sending, setSending] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -29,7 +29,7 @@ const NewsletterManagement = () => {
       setLoading(true);
       const response = await fetch(`${API_BASE_URL}/newsletter.php`);
       const result = await response.json();
-      
+
       if (result.success) {
         setSubscribers(result.data);
         const active = result.data.filter(s => s.is_active).length;
@@ -46,7 +46,7 @@ const NewsletterManagement = () => {
     try {
       const response = await fetch(`${API_BASE_URL}/newsletter.php?action=campaigns`);
       const result = await response.json();
-      
+
       if (result.success) {
         setCampaigns(result.data || []);
       }
@@ -57,25 +57,25 @@ const NewsletterManagement = () => {
 
   const handleSendCampaign = async (e) => {
     e.preventDefault();
-    
+
     if (!campaignForm.subject || !campaignForm.content) {
       setMessage('Please fill in all fields');
       return;
     }
-    
+
     if (window.confirm(`Send newsletter to ${stats.active} active subscribers?`)) {
       setSending(true);
       setMessage('');
-      
+
       try {
         const response = await fetch(`${API_BASE_URL}/newsletter.php?action=send`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(campaignForm)
         });
-        
+
         const result = await response.json();
-        
+
         if (result.success) {
           setMessage(`✅ Newsletter sent to ${result.sent} subscribers!`);
           setCampaignForm({ subject: '', content: '', type: 'promotional' });
@@ -95,17 +95,17 @@ const NewsletterManagement = () => {
 
   const emailTemplates = {
     promotional: {
-      subject: 'Special Offer from Vastrani Looms',
+      subject: 'Special Offer from AJ-Mana Style',
       content: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff;">
         <div style="text-align: center; margin-bottom: 20px;">
-          <img src="https://seashell-yak-534067.hostingersite.com/Logo_Transparent.png" alt="Vastrani Looms" style="height: 60px;">
+          <img src="https://seashell-yak-534067.hostingersite.com/Logo_Transparent.png" alt="AJ-Mana Style" style="height: 60px;">
         </div>
-        <h1 style="color: #8B4513; font-size: 24px;">Special Offer from Vastrani Looms</h1>
+        <h1 style="color: #8B4513; font-size: 24px;">Special Offer from AJ-Mana Style</h1>
         <p style="font-size: 16px; line-height: 1.6;">Dear Valued Customer,</p>
         <p style="font-size: 16px; line-height: 1.6;">We're excited to offer you an exclusive discount on our handcrafted sarees!</p>
         <div style="background: #f5f5f5; padding: 20px; margin: 20px 0; text-align: center; border-radius: 8px;">
           <h2 style="color: #8B4513; font-size: 28px; margin: 0;">Get 20% OFF</h2>
-          <p style="font-size: 18px; margin: 10px 0;">Use code: <strong>VASTRANI20</strong></p>
+          <p style="font-size: 18px; margin: 10px 0;">Use code: <strong>AJMANA20</strong></p>
         </div>
         <p style="font-size: 16px; line-height: 1.6;">Visit our website to explore our latest collection of authentic handwoven sarees.</p>
         <div style="text-align: center; margin: 30px 0;">
@@ -113,19 +113,19 @@ const NewsletterManagement = () => {
         </div>
         <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
         <p style="color: #666; font-size: 12px; text-align: center; line-height: 1.6;">
-          You're receiving this email because you subscribed to Vastrani Looms newsletter.<br>
-          Vastrani Looms | Hyderabad, India<br>
+          You're receiving this email because you subscribed to AJ-Mana Style newsletter.<br>
+          AJ-Mana Style | Hyderabad, India<br>
           <a href="https://seashell-yak-534067.hostingersite.com/unsubscribe" style="color: #8B4513;">Unsubscribe</a>
         </p>
       </div>`
     },
     newArrival: {
-      subject: 'New Collection Available at Vastrani Looms',
+      subject: 'New Collection Available at AJ-Mana Style',
       content: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff;">
         <div style="text-align: center; margin-bottom: 20px;">
-          <img src="https://seashell-yak-534067.hostingersite.com/Logo_Transparent.png" alt="Vastrani Looms" style="height: 60px;">
+          <img src="https://seashell-yak-534067.hostingersite.com/Logo_Transparent.png" alt="AJ-Mana Style" style="height: 60px;">
         </div>
-        <h1 style="color: #8B4513; font-size: 24px;">New Arrivals at Vastrani Looms</h1>
+        <h1 style="color: #8B4513; font-size: 24px;">New Arrivals at AJ-Mana Style</h1>
         <p style="font-size: 16px; line-height: 1.6;">Dear Customer,</p>
         <p style="font-size: 16px; line-height: 1.6;">Discover our latest handwoven sarees, crafted with tradition and elegance.</p>
         <div style="margin: 20px 0;">
@@ -137,27 +137,27 @@ const NewsletterManagement = () => {
         </div>
         <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
         <p style="color: #666; font-size: 12px; text-align: center; line-height: 1.6;">
-          You're receiving this email because you subscribed to Vastrani Looms newsletter.<br>
-          Vastrani Looms | Hyderabad, India<br>
+          You're receiving this email because you subscribed to AJ-Mana Style newsletter.<br>
+          AJ-Mana Style | Hyderabad, India<br>
           <a href="https://seashell-yak-534067.hostingersite.com/unsubscribe" style="color: #8B4513;">Unsubscribe</a>
         </p>
       </div>`
     },
     announcement: {
-      subject: 'Important Update from Vastrani Looms',
+      subject: 'Important Update from AJ-Mana Style',
       content: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff;">
         <div style="text-align: center; margin-bottom: 20px;">
-          <img src="https://seashell-yak-534067.hostingersite.com/Logo_Transparent.png" alt="Vastrani Looms" style="height: 60px;">
+          <img src="https://seashell-yak-534067.hostingersite.com/Logo_Transparent.png" alt="AJ-Mana Style" style="height: 60px;">
         </div>
-        <h1 style="color: #8B4513; font-size: 24px;">Update from Vastrani Looms</h1>
+        <h1 style="color: #8B4513; font-size: 24px;">Update from AJ-Mana Style</h1>
         <p style="font-size: 16px; line-height: 1.6;">Dear Customer,</p>
         <p style="font-size: 16px; line-height: 1.6;">[Your announcement message here]</p>
-        <p style="font-size: 16px; line-height: 1.6;">Thank you for being part of the Vastrani Looms family.</p>
-        <p style="font-size: 16px; line-height: 1.6; margin-top: 20px;">Warm regards,<br><strong>Team Vastrani Looms</strong></p>
+        <p style="font-size: 16px; line-height: 1.6;">Thank you for being part of the AJ-Mana Style family.</p>
+        <p style="font-size: 16px; line-height: 1.6; margin-top: 20px;">Warm regards,<br><strong>Team AJ-Mana Style</strong></p>
         <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
         <p style="color: #666; font-size: 12px; text-align: center; line-height: 1.6;">
-          You're receiving this email because you subscribed to Vastrani Looms newsletter.<br>
-          Vastrani Looms | Hyderabad, India<br>
+          You're receiving this email because you subscribed to AJ-Mana Style newsletter.<br>
+          AJ-Mana Style | Hyderabad, India<br>
           <a href="https://seashell-yak-534067.hostingersite.com/unsubscribe" style="color: #8B4513;">Unsubscribe</a>
         </p>
       </div>`
@@ -176,7 +176,7 @@ const NewsletterManagement = () => {
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold font-display text-primary dark:text-secondary mb-6">Newsletter Management</h1>
-      
+
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
@@ -267,7 +267,7 @@ const NewsletterManagement = () => {
       {activeTab === 'create' && (
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
           <h2 className="text-xl font-bold mb-4">Create New Campaign</h2>
-          
+
           {/* Quick Templates */}
           <div className="mb-6">
             <p className="text-sm font-semibold mb-2">Quick Templates:</p>
